@@ -1,4 +1,3 @@
-```markdown
 # CurrencyWatcher
 
 **CurrencyWatcher** is a Node.js application that monitors the exchange rate between ILS (Israeli Shekel) and THB (Thai Baht) and sends a notification via Pushover if the rate exceeds a specified threshold. It uses Puppeteer for web scraping to get the exchange rate from Google Finance.
@@ -143,4 +142,3 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 ## Author
 
 Created by Dan Burdetsky.
-```
