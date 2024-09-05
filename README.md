@@ -25,8 +25,7 @@
    - Open the downloaded file and follow the instructions to install Node.js.
 
 2. **Install a Code Editor (Optional):**
-   - You can use any text editor, but **Visual Studio Code** is recommended.
-   - Download it from [here](https://code.visualstudio.com/) and follow the instructions to install.
+   - Download **Visual Studio Code** from [here](https://code.visualstudio.com/) and install it by following the on-screen instructions.
 
 ### Step 2: Set Up Pushover App on Your iPhone
 
