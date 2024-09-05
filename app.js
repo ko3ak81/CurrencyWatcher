@@ -2,19 +2,21 @@ require('dotenv').config(); // Load environment variables from .env
 const puppeteer = require('puppeteer');
 const axios = require('axios');
 
+// ================== USER CONFIGURATION SECTION ==================
 // Pushover credentials from environment variables
 const PUSHOVER_USER_KEY = process.env.PUSHOVER_USER_KEY;
 const PUSHOVER_API_TOKEN = process.env.PUSHOVER_API_TOKEN;
 
-// URL to fetch the exchange rate
+// URL to fetch the exchange rate (can be updated by user)
 const URL = 'https://www.google.com/finance/quote/ILS-THB';
 
-// Selector to get the exchange rate
+// Selector to get the exchange rate (can be updated by user)
 const SELECTOR =
   '#yDmH0d > c-wiz.zQTmif.SSPGKf.u5wqUe > div > div.e1AOyf > div > main > div.Gfxi4 > div.VfPpkd-WsjYwc.VfPpkd-WsjYwc-OWXEXe-INsAgc.KC1dQ.Usd1Ac.AaN0Dd.QZMA8b > c-wiz > div > div:nth-child(1) > div > div.rPF6Lc > div > div:nth-child(1) > div > span > div > div';
 
-// Threshold for alert
+// Threshold for alert (can be updated by user)
 const THRESHOLD_RATE = 9.6;
+// ================== END OF USER CONFIGURATION SECTION ==================
 
 // Function to send a notification using Pushover
 async function sendPushoverNotification(message) {

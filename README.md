@@ -7,6 +7,7 @@
 - Fetches the exchange rate from Google Finance using Puppeteer.
 - Sends an alert via Pushover if the exchange rate exceeds a defined threshold.
 - Runs continuously, checking the exchange rate every minute.
+- Configurable URL, selector, and threshold for alerts.
 
 ## Requirements
 
@@ -70,12 +71,19 @@
    PUSHOVER_USER_KEY=your_pushover_user_key
    ```
 
-5. **Update the URL and Threshold (Optional):**
-   - If you need to change the URL for fetching the exchange rate or update the threshold for alerts, open `app.js` in a text editor and make the desired changes:
+5. **Update the URL, Selector, and Threshold (Optional):**
+   - Open `app.js` in a text editor and make the desired changes in the **USER CONFIGURATION SECTION**:
+
    - To change the URL, update the `URL` variable:
    ```javascript
    const URL = 'https://www.google.com/finance/quote/ILS-THB'; // Update with your desired URL
    ```
+
+   - To change the CSS selector for the exchange rate, update the `SELECTOR` variable:
+   ```javascript
+   const SELECTOR = '#your-new-selector'; // Update with your desired CSS selector
+   ```
+
    - To change the threshold rate, update the `THRESHOLD_RATE` variable:
    ```javascript
    const THRESHOLD_RATE = 9.6; // Set your desired threshold rate here
