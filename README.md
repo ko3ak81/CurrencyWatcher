@@ -1,5 +1,3 @@
-Here is the revised `README.md` file for **CurrencyWatcher** that removes any duplications, ensures logical flow, and accurately reflects the correct application name.
-
 ```markdown
 # CurrencyWatcher
 
@@ -147,5 +145,3 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 Created by Dan Burdetsky.
 ```
-
-This `README.md` provides a comprehensive guide for both technical and non-technical users, ensuring no duplicated content and maintaining a logical flow of instructions.
