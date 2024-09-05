@@ -16,7 +16,7 @@
 
 ## Installation and Setup
 
-### Step 1: Install Required Software on Mac
+### Step 1: Install Required Software
 
 1. **Install Node.js:**
    - Go to the [Node.js official website](https://nodejs.org/).
@@ -45,62 +45,54 @@
    - Enter a name (e.g., "CurrencyWatcher") and click **Create Application**.
    - Copy the **API Token/Key** provided; you'll need this for the next steps.
 
-### Step 3: Prepare the Code on Your Mac
+### Step 3: Clone the Repository and Configure the Application
 
 1. **Open the Terminal Application:**
    - Find **Terminal** using **Spotlight Search** (press `Command + Space` and type "Terminal").
 
-2. **Create a New Folder for the Project:**
+2. **Clone the CurrencyWatcher Repository:**
    - In the Terminal, type the following commands and press **Enter**:
    ```bash
-   mkdir currency-watcher
-   cd currency-watcher
+   git clone https://github.com/ko3ak81/CurrencyWatcher.git
+   cd CurrencyWatcher
    ```
 
-3. **Create the Application File:**
-   - In the Terminal, type:
+3. **Install Required Libraries:**
+   - In the Terminal, run the following command to install the necessary libraries:
    ```bash
-   nano app.js
+   npm install
    ```
-   - Copy and paste the provided code into the `app.js` file. After pasting, press `Control + X`, then `Y`, and **Enter** to save.
 
-4. **Create a `.env` File for Your API Keys:**
-   - In the Terminal, type:
-   ```bash
-   nano .env
-   ```
-   - Paste the following into the `.env` file, replacing the placeholders with your actual keys:
+4. **Update the `.env` File with Your API Keys:**
+   - Open the `.env` file in a text editor and replace the placeholders with your actual Pushover API token and user key:
    ```bash
    PUSHOVER_API_TOKEN=your_pushover_api_token
    PUSHOVER_USER_KEY=your_pushover_user_key
    ```
-   - Press `Control + X`, then `Y`, and **Enter** to save.
 
-5. **Install Required Libraries:**
-   - In the Terminal, type the following command to install necessary libraries:
-   ```bash
-   npm install puppeteer axios dotenv
+5. **Update the URL and Threshold (Optional):**
+   - If you need to change the URL for fetching the exchange rate or update the threshold for alerts, open `app.js` in a text editor and make the desired changes:
+   - To change the URL, update the `URL` variable:
+   ```javascript
+   const URL = 'https://www.google.com/finance/quote/ILS-THB'; // Update with your desired URL
+   ```
+   - To change the threshold rate, update the `THRESHOLD_RATE` variable:
+   ```javascript
+   const THRESHOLD_RATE = 9.6; // Set your desired threshold rate here
    ```
 
 ### Step 4: Run the Code to Start Monitoring
 
 1. **Run the Application:**
-   - In the Terminal, make sure you are in the `currency-watcher` directory:
+   - In the Terminal, ensure you are in the `CurrencyWatcher` directory:
    ```bash
-   cd currency-watcher
+   cd CurrencyWatcher
    ```
    - Run the following command to start the monitoring process:
    ```bash
    node app.js
    ```
    - The Terminal will display messages showing the current exchange rate every minute. If the rate exceeds the threshold, you will receive a notification on your iPhone via Pushover.
-
-2. **Modify the Threshold Rate (Optional):**
-   - To change the threshold rate, open `app.js` in your editor and locate the following line:
-   ```javascript
-   const THRESHOLD_RATE = 9.6; // Set your desired threshold rate here
-   ```
-   - Change `9.6` to your desired threshold rate, save the file, and restart the application.
 
 ### Step 5: Keep the Script Running
 
