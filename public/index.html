@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Exchange Rate Monitor Configuration</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    form { margin-bottom: 20px; }
+    textarea { width: 100%; height: 100px; }
+  </style>
+</head>
+<body>
+  <h1>Exchange Rate Monitor Configuration</h1>
+
+  <!-- Form to Update Configuration -->
+  <form id="configForm">
+    <h2>Update Configuration</h2>
+    <label for="url">URL:</label><br>
+    <input type="text" id="url" name="url" value=""><br><br>
+
+    <label for="selector">Selector:</label><br>
+    <input type="text" id="selector" name="selector" value=""><br><br>
+
+    <label for="thresholds">Thresholds (JSON format):</label><br>
+    <textarea id="thresholds" name="thresholds"></textarea><br><br>
+
+    <label for="checkInterval">Check Interval (ms):</label><br>
+    <input type="text" id="checkInterval" name="checkInterval" value=""><br><br>
+
+    <button type="button" onclick="updateConfig()">Update Configuration</button>
+  </form>
+
+  <!-- Form to Trigger Exchange Rate Check -->
+  <form id="triggerForm">
+    <h2>Trigger Exchange Rate Check</h2>
+    <button type="button" onclick="triggerCheck()">Trigger Check</button>
+  </form>
+
+  <!-- Section to Display Logs -->
+  <h2>Exchange Rate Logs</h2>
+  <div id="logs"></div>
+
+  <script>
+    // Load current configuration on page load
+    window.onload = async function() {
+      const response = await fetch('/config');
+      const config = await response.json();
+      document.getElementById('url').value = config.url;
+      document.getElementById('selector').value = config.selector;
+      document.getElementById('thresholds').value = JSON.stringify(config.thresholds, null, 2);
+      document.getElementById('checkInterval').value = config.checkInterval;
+
+      loadLogs(); // Load logs as well
+    };
+
+    // Function to update configuration
+    async function updateConfig() {
+      const url = document.getElementById('url').value;
+      const selector = document.getElementById('selector').value;
+      const thresholds = document.getElementById('thresholds').value;
+      const checkInterval = document.getElementById('checkInterval').value;
+
+      const response = await fetch('/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, selector, thresholds, checkInterval })
+      });
+      alert(await response.text());
+    }
+
+    // Function to trigger exchange rate check
+    async function triggerCheck() {
+      const response = await fetch('/trigger-check', { method: 'POST' });
+      alert(await response.text());
+    }
+
+    // Function to load logs
+    async function loadLogs() {
+      const response = await fetch('/logs');
+      const logs = await response.text();
+      document.getElementById('logs').innerHTML = logs;
+    }
+  </script>
+</body>
+</html>

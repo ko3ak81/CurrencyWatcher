@@ -1,0 +1,14 @@
+{
+    "url": "https://www.google.com/finance/quote/ILS-THB",
+    "selector": "#yDmH0d > c-wiz.zQTmif.SSPGKf.u5wqUe > div > div.e1AOyf > div > main > div.Gfxi4 > div.VfPpkd-WsjYwc.VfPpkd-WsjYwc-OWXEXe-INsAgc.KC1dQ.Usd1Ac.AaN0Dd.QZMA8b > c-wiz > div > div:nth-child(1) > div > div.rPF6Lc > div > div:nth-child(1) > div > span > div > div",
+    "thresholds": [{
+            "value": 9.004,
+            "channels": ["pushover", "email"]
+        },
+        {
+            "value": 9.8,
+            "channels": ["pushover", "slack"]
+        }
+    ],
+    "checkInterval": 60000
+}

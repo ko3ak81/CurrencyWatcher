@@ -9,10 +9,15 @@
   "author": "Dan Burdetsky",
   "license": "MIT",
   "dependencies": {
+    "@slack/web-api": "^7.3.4",
     "axios": "^1.7.7",
+    "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.15",
     "puppeteer": "^23.3.0"
   },
-  "devDependencies": {},
   "keywords": []
 }

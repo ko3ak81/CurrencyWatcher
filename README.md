@@ -1,18 +1,20 @@
 # CurrencyWatcher
 
-**CurrencyWatcher** is a Node.js application that monitors the exchange rate between ILS (Israeli Shekel) and THB (Thai Baht) and sends a notification via Pushover if the rate exceeds a specified threshold. It uses Puppeteer for web scraping to get the exchange rate from Google Finance.
+**CurrencyWatcher** is a Node.js application that monitors the exchange rate between ILS (Israeli Shekel) and THB (Thai Baht) and sends notifications via Pushover, Email, and Slack if the rate exceeds specified thresholds. It uses Puppeteer for web scraping to get the exchange rate from Google Finance and supports retry logic and logging for reliability.
 
 ## Features
 
 - Fetches the exchange rate from Google Finance using Puppeteer.
-- Sends an alert via Pushover if the exchange rate exceeds a defined threshold.
-- Runs continuously, checking the exchange rate every minute.
-- Configurable URL, selector, and threshold for alerts.
+- Supports multiple notification channels: Pushover, Email, and Slack.
+- Configurable URL, selector, thresholds, and check intervals via a JSON configuration file.
+- Logs exchange rates to a CSV file and supports basic trend analysis.
 
 ## Requirements
 
 - Node.js (v14 or higher recommended)
 - A Pushover account with an API token and user key
+- A Gmail account for email notifications (or modify the `EMAIL_CONFIG` to use a different email service)
+- A Slack workspace and bot token
 - Google Chrome or Chromium (Puppeteer requirement)
 
 ## Installation and Setup
@@ -27,24 +29,20 @@
 2. **Install a Code Editor (Optional):**
    - Download **Visual Studio Code** from [here](https://code.visualstudio.com/) and install it by following the on-screen instructions.
 
-### Step 2: Set Up Pushover App on Your iPhone
+### Step 2: Set Up Pushover, Email, and Slack
 
-1. **Install Pushover App:**
-   - Open the **App Store** on your iPhone.
-   - Search for **Pushover** and install the app.
+1. **Pushover Configuration:**
+   - Install the **Pushover** app on your iPhone or Android device.
+   - Create a new account and note down your **User Key**.
+   - Go to [Pushover's website](https://pushover.net/) to create a new application and obtain an **API Token**.
 
-2. **Create a Pushover Account:**
-   - Open the Pushover app on your iPhone.
-   - Sign up with your email and password, then verify your email address if needed.
+2. **Email Configuration:**
+   - Use a Gmail account or modify the `EMAIL_CONFIG` in the code to use a different email service provider.
+   - Generate an **App Password** for your Gmail account and note it down.
 
-3. **Get Your Pushover User Key:**
-   - Once logged in, your **User Key** will be displayed on the app’s main screen. This key is unique to your device.
-
-4. **Create a Pushover Application:**
-   - Visit [Pushover's website](https://pushover.net/) and log in using your account credentials.
-   - Navigate to **Dashboard > Create a New Application/API Token**.
-   - Enter a name (e.g., "CurrencyWatcher") and click **Create Application**.
-   - Copy the **API Token/Key** provided; you'll need this for the next steps.
+3. **Slack Configuration:**
+   - Create a Slack app in your workspace and add the `chat:write` scope.
+   - Install the app to your workspace and obtain the **Bot User OAuth Token**.
 
 ### Step 3: Clone the Repository and Configure the Application
 
@@ -64,30 +62,38 @@
    npm install
    ```
 
-4. **Update the `.env` File with Your API Keys:**
-   - Open the `.env` file in a text editor and replace the placeholders with your actual Pushover API token and user key:
+4. **Configure Environment Variables:**
+   - Create a `.env` file in the root directory and add your environment variables:
    ```bash
-   PUSHOVER_API_TOKEN=your_pushover_api_token
    PUSHOVER_USER_KEY=your_pushover_user_key
+   PUSHOVER_API_TOKEN=your_pushover_api_token
+   EMAIL_USER=your_email@gmail.com
+   EMAIL_PASS=your_app_password
+   EMAIL_RECIPIENT=recipient_email@gmail.com
+   SLACK_BOT_TOKEN=your_slack_bot_token
    ```
 
-5. **Update the URL, Selector, and Threshold (Optional):**
-   - Open `app.js` in a text editor and make the desired changes in the **USER CONFIGURATION SECTION**:
+5. **Configure the `config.json` File:**
+   - Open `config.json` and customize the following settings:
+     - **`url`**: The URL to fetch the exchange rate from.
+     - **`selector`**: The CSS selector to extract the exchange rate from the webpage.
+     - **`thresholds`**: An array of thresholds for alerting, including the value and channels to notify.
+     - **`checkInterval`**: The interval (in milliseconds) for checking the exchange rate. The default is 60000 (1 minute).
 
-   - To change the URL, update the `URL` variable:
-   ```javascript
-   const URL = 'https://www.google.com/finance/quote/ILS-THB'; // Update with your desired URL
-   ```
-
-   - To change the CSS selector for the exchange rate, update the `SELECTOR` variable:
-   ```javascript
-   const SELECTOR = '#your-new-selector'; // Update with your desired CSS selector
-   ```
-
-   - To change the threshold rate, update the `THRESHOLD_RATE` variable:
-   ```javascript
-   const THRESHOLD_RATE = 9.6; // Set your desired threshold rate here
-   ```
+### Example `config.json`:
+```json
+{
+  "url": "https://www.google.com/finance/quote/ILS-THB",
+  "selector": "#yDmH0d > c-wiz > div > div > div > main > div > div > span > div > div",
+  "thresholds": [
+    {
+      "value": 9.6,
+      "channels": ["pushover", "email", "slack"]
+    }
+  ],
+  "checkInterval": 60000
+}
+```
 
 ### Step 4: Run the Code to Start Monitoring
 
@@ -100,31 +106,41 @@
    ```bash
    node app.js
    ```
-   - The Terminal will display messages showing the current exchange rate every minute. If the rate exceeds the threshold, you will receive a notification on your iPhone via Pushover.
+   - The Terminal will display messages showing the current exchange rate every minute. If the rate exceeds the threshold, you will receive notifications via the configured channels.
 
 ### Step 5: Keep the Script Running
 
 1. **Leave the Terminal Window Open:**
-   - To continue receiving notifications, keep the Terminal window open. The script will run in the background, checking the exchange rate every minute.
+   - To continue receiving notifications, keep the Terminal window open. The script will run in the background, checking the exchange rate at the configured interval.
 
 2. **Stop the Script:**
    - To stop the script, click on the Terminal window and press `Control + C`.
 
+## Additional Features
+
+- **Retry Logic:** The script includes retry logic to handle errors during fetching.
+- **Logging:** Exchange rates are logged to `exchange_rate_log.csv`.
+- **Rate Analysis:** Run `analyzeRateHistory()` to analyze the logged data and calculate trends.
+
 ## Troubleshooting Tips
 
 1. **Pushover Notifications Not Working:**
-   - Ensure the Pushover app is installed and notifications are allowed on your iPhone.
+   - Ensure the Pushover app is installed and notifications are allowed on your device.
    - Verify your **User Key** and **API Token** in the `.env` file.
 
-2. **Terminal Errors:**
+2. **Email or Slack Notifications Not Working:**
+   - Ensure the correct **Email** or **Slack Bot Token** is configured.
+   - Check that the recipient email and Slack channel are valid.
+
+3. **Terminal Errors:**
    - Make sure all commands are entered correctly and that you have an internet connection.
 
-3. **Script Not Running Continuously:**
+4. **Script Not Running Continuously:**
    - Ensure the Terminal window remains open. If the Mac goes to sleep or the Terminal is closed, the script will stop running.
 
 ## Summary
 
-By following these steps, you have set up **CurrencyWatcher** on your Mac to send real-time alerts to your iPhone using the Pushover app. This setup is ideal for keeping track of exchange rates and receiving instant notifications when your specified conditions are met.
+By following these steps, you have set up **CurrencyWatcher** to monitor exchange rates and send real-time alerts via Pushover, Email, and Slack. This setup is ideal for keeping track of exchange rates and receiving instant notifications when your specified conditions are met.
 
 ## License
 
@@ -138,6 +154,8 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 
 - [Puppeteer](https://github.com/puppeteer/puppeteer) - Headless browser for scraping
 - [Pushover](https://pushover.net/) - Simple notifications for Android, iOS, and desktop
+- [Nodemailer](https://nodemailer.com/) - Node.js library for sending emails
+- [Slack Web API](https://slack.dev/node-slack-sdk/web-api) - Slack client for posting messages
 
 ## Author
 
